@@ -64,6 +64,11 @@ public class Pokemon {
 	public String guardar() {
 		return nombre+";"+ estado;
 	}
+	
+	public String crearCopia() {
+		String copia = nombre+";"+habitat+";"+porcentajeAparicion+";"+vida+";"+ataque+";"+defensa+";"+ataqueEsp+";"+defensaEsp+";"+velocidad+";"+tipo;
+		return copia;
+	}
 
 	private void calcularStatsTotales() {
 		statsTotal = vida + ataque + defensa + ataqueEsp + defensaEsp + velocidad;
@@ -78,5 +83,5 @@ public class Pokemon {
 			}
 		}
 	}
-
+	
 }
