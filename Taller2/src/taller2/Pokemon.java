@@ -64,6 +64,9 @@ public class Pokemon {
 	public String guardar() {
 		return nombre+";"+ estado;
 	}
+	public String getReview() {
+		return nombre +"|"+tipo+"|Stats totales: "+statsTotal+"|Estado: "+estado;
+	}
 	
 	public String crearCopia() {
 		String copia = nombre+";"+habitat+";"+porcentajeAparicion+";"+vida+";"+ataque+";"+defensa+";"+ataqueEsp+";"+defensaEsp+";"+velocidad+";"+tipo;
