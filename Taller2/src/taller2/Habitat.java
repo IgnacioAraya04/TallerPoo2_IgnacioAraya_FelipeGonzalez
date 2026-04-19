@@ -1,4 +1,4 @@
- package taller2;
+package taller2;
 
 import java.util.ArrayList;
 import java.util.Random;
