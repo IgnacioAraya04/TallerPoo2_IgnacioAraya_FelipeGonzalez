@@ -6,9 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
-import java.util.function.UnaryOperator;
 
 public class Sistema {
 	TablaTipos tabla = new TablaTipos();
@@ -193,14 +191,28 @@ public class Sistema {
 				System.out.println("Un " + encuentroAleatorio.getNombre() + " salvaje ha aparecido!!");
 				System.out.println("Que quieres hacer?\n" + "1) Capturar.\n" + "2) Huir");
 				Integer elecCaptura = Integer.valueOf(scan.nextLine());
+				//pequeño cambio (TEMPORAL - En revision)
 				if (elecCaptura == 1) {
-					String copia = encuentroAleatorio.crearCopia();
-					String[] pCopia = copia.split(";");
-					Pokemon pokeCopia = new Pokemon(pCopia[0], pCopia[1], Float.valueOf(pCopia[2]),
-							Integer.valueOf(pCopia[3]), Integer.valueOf(pCopia[4]), Integer.valueOf(pCopia[5]),
-							Integer.valueOf(pCopia[6]), Integer.valueOf(pCopia[7]), Integer.valueOf(pCopia[8]),
-							pCopia[9]);
-					jugador.atraparPokemon(pokeCopia);
+					Boolean  existePokemon = false;
+					for(Pokemon pokemon : jugador.getPokemonAtrapados()) {
+						if(pokemon.getNombre().equalsIgnoreCase(encuentroAleatorio.getNombre())) {
+							existePokemon = true;
+							break;
+						}
+					}
+					if(!existePokemon)	{
+						String copia = encuentroAleatorio.crearCopia();
+						String[] pCopia = copia.split(";");
+						Pokemon pokeCopia = new Pokemon(pCopia[0], pCopia[1], Float.valueOf(pCopia[2]),
+								Integer.valueOf(pCopia[3]), Integer.valueOf(pCopia[4]), Integer.valueOf(pCopia[5]),
+								Integer.valueOf(pCopia[6]), Integer.valueOf(pCopia[7]), Integer.valueOf(pCopia[8]),
+								pCopia[9]);
+						jugador.atraparPokemon(pokeCopia);
+					} else {
+						System.out.println("No puedes capturar un Pokemon que ya posees.");
+					}
+					
+
 				}else if (elecCaptura == 2) {
 					break;
 				} else {
@@ -208,13 +220,53 @@ public class Sistema {
 				}
 			} catch (Exception e) {
 				System.out.println("Utilizar un número");
-			}
+			}scan.close();
 			
 			break;
 		}
 			break;
 		case 3:
+			//PC
+			ArrayList<Pokemon> pokemonsEntrenadorList = jugador.getPokemonAtrapados();
+			Scanner scanPC = new Scanner(System.in);
+			System.out.println("------ Gestion de Equipo y PC ------");
+			
+			for(int i = 0; i<pokemonsEntrenadorList.size(); i++) {
+				//esto de aqui es la etiqueta, es mas que nada para ubicarme rapidamente en que categorizar el size(), osea que pokemons estan en el team o no
+				String etiqueta;
+				if(i<6) {
+					etiqueta = "[EQUIPO]";
+				} else {
+					etiqueta = "[PC]";
+				}
+				System.out.println(i+1 + ") " + etiqueta + " - " + pokemonsEntrenadorList.get(i).getNombre());
+			}
+			//Esto de aqui es para SI SOLO SI hay mas de 6 pokemones (TEMPORAL)
+			if(pokemonsEntrenadorList.size() > 6) {
+				try {
+					System.out.println("Seleccione un Pokemon del [PC] (ID valido desde el 7 o más) que quieras subir: ");
+					int desdeID = Integer.parseInt(scanPC.nextLine()) - 1;
+					
+					System.out.println("Seleccione un Pokemon del [EQUIPO] que sera remplazado (ID valido desde 1 al 6");
+					int haciaID = Integer.parseInt(scanPC.nextLine()) - 1;
 
+					if(haciaID < 6 && desdeID >= 6 && desdeID < pokemonsEntrenadorList.size()) {
+						Pokemon temporalPokemon = pokemonsEntrenadorList.get(haciaID);
+						pokemonsEntrenadorList.set(haciaID, pokemonsEntrenadorList.get(desdeID));
+		                pokemonsEntrenadorList.set(desdeID, temporalPokemon);
+		                System.out.println("el cambio se hizo con exito!");
+					} else {
+						System.out.println("Movimiento invalido. Pruebe de nuevo.");
+					}
+					
+					
+				} catch (NumberFormatException e) {
+					System.out.println(e + " - ERROR: ingrese numeros Validos.");
+				}
+			} else {
+				System.out.println("No tienes pokemons en PC para realizar cambios.");
+			}
+			
 			break;
 		case 4:
 
@@ -223,7 +275,11 @@ public class Sistema {
 
 			break;
 		case 6:
-
+			//Curar Pokemons
+			for(Pokemon pokemon : jugador.getPokemonAtrapados()) {
+				pokemon.setEstado("Vivo");
+			}
+			System.out.println("todos tus Pokemones han sido curados y listos para la batalla!");
 			break;
 		case 7:
 
