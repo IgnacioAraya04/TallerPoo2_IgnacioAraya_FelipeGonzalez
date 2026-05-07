@@ -82,7 +82,7 @@ public class Sistema {
 				String string = (String) arch.nextLine();
 				String[] partes = string.split(";");
 				tr = new Trainer(Integer.valueOf(partes[0]), partes[1], partes[2], 6);
-				for (int i = 2; i < tr.getCantidadPoke() ; i++) {
+				for (int i = 2; i < tr.getCantidadPoke(); i++) {
 					for (Pokemon pokemon : pokedex) {
 						if (pokemon.getNombre().equalsIgnoreCase(partes[i])) {
 							tr.addPoke(pokemon);
@@ -112,7 +112,7 @@ public class Sistema {
 	private Integer cargarPartida() throws FileNotFoundException {
 		File file = new File("Registros.txt");
 		if (!file.exists()) {
-			System.out.println("No existe una partida guardada");
+			System.out.println("No existe una partida guardada\n");
 			return 1;
 		} else {
 			Scanner registros = new Scanner(file);
@@ -170,116 +170,145 @@ public class Sistema {
 			System.out.println("Equipo: ");
 			if (jugador.getPokemonAtrapados().size() < 6) {
 				for (int i = 0; i < jugador.getPokemonAtrapados().size(); i++) {
-					System.out.println((i+1) + ") " + jugador.getPokemonAtrapados().get(i).getReview());
+					System.out.println((i + 1) + ") " + jugador.getPokemonAtrapados().get(i).getReview());
 				}
+				System.out.println("\n");
 			} else {
 				for (int i = 0; i < 5; i++) {
-					System.out.println((i+1) + ") " + jugador.getPokemonAtrapados().get(i).getReview());
+					System.out.println((i + 1) + ") " + jugador.getPokemonAtrapados().get(i).getReview());
 				}
+				System.out.println("\n");
 			}
 			break;
 		case 2:
 			System.out.println("Habitats: ");
-		while (true) {
-			Scanner scan = new Scanner(System.in);
-			for (int i = 0; i <listaHab.size(); i++) {
-				System.out.println((i+1)+") "+ listaHab.get(i).getNombre());
-			}
-			try {
-				Integer elecHabitat = Integer.valueOf(scan.nextLine());
-				Pokemon encuentroAleatorio = listaHab.get(elecHabitat-1).getEncounter();
-				System.out.println("Un " + encuentroAleatorio.getNombre() + " salvaje ha aparecido!!");
-				System.out.println("Que quieres hacer?\n" + "1) Capturar.\n" + "2) Huir");
-				Integer elecCaptura = Integer.valueOf(scan.nextLine());
-				//pequeño cambio (TEMPORAL - En revision)
-				if (elecCaptura == 1) {
-					Boolean  existePokemon = false;
-					for(Pokemon pokemon : jugador.getPokemonAtrapados()) {
-						if(pokemon.getNombre().equalsIgnoreCase(encuentroAleatorio.getNombre())) {
-							existePokemon = true;
-							break;
-						}
-					}
-					if(!existePokemon)	{
-						String copia = encuentroAleatorio.crearCopia();
-						String[] pCopia = copia.split(";");
-						Pokemon pokeCopia = new Pokemon(pCopia[0], pCopia[1], Float.valueOf(pCopia[2]),
-								Integer.valueOf(pCopia[3]), Integer.valueOf(pCopia[4]), Integer.valueOf(pCopia[5]),
-								Integer.valueOf(pCopia[6]), Integer.valueOf(pCopia[7]), Integer.valueOf(pCopia[8]),
-								pCopia[9]);
-						jugador.atraparPokemon(pokeCopia);
-					} else {
-						System.out.println("No puedes capturar un Pokemon que ya posees.");
-					}
-					
-
-				}else if (elecCaptura == 2) {
-					break;
-				} else {
-					System.out.println("seleccionar una de las opciones");
+			while (true) {
+				Scanner scan = new Scanner(System.in);
+				for (int i = 0; i < listaHab.size(); i++) {
+					System.out.println((i + 1) + ") " + listaHab.get(i).getNombre());
 				}
-			} catch (Exception e) {
-				System.out.println("Utilizar un número");
-			}scan.close();
-			
-			break;
-		}
+				try {
+					Integer elecHabitat = Integer.valueOf(scan.nextLine());
+					Pokemon encuentroAleatorio = listaHab.get(elecHabitat - 1).getEncounter();
+					System.out.println("Un " + encuentroAleatorio.getNombre() + " salvaje ha aparecido!!\n");
+					System.out.println("Que quieres hacer?\n" + "1) Capturar.\n" + "2) Huir.\n");
+					Integer elecCaptura = Integer.valueOf(scan.nextLine());
+					// pequeño cambio (TEMPORAL - En revision)
+					if (elecCaptura == 1) {
+						Boolean existePokemon = false;
+						for (Pokemon pokemon : jugador.getPokemonAtrapados()) {
+							if (pokemon.getNombre().equalsIgnoreCase(encuentroAleatorio.getNombre())) {
+								existePokemon = true;
+								break;
+							}
+						}
+						if (!existePokemon) {
+							String copia = encuentroAleatorio.crearCopia();
+							String[] pCopia = copia.split(";");
+							Pokemon pokeCopia = new Pokemon(pCopia[0], pCopia[1], Float.valueOf(pCopia[2]),
+									Integer.valueOf(pCopia[3]), Integer.valueOf(pCopia[4]), Integer.valueOf(pCopia[5]),
+									Integer.valueOf(pCopia[6]), Integer.valueOf(pCopia[7]), Integer.valueOf(pCopia[8]),
+									pCopia[9]);
+							jugador.atraparPokemon(pokeCopia);
+						} else {
+							System.out.println("No puedes capturar un Pokemon que ya posees.\n");
+						}
+
+					} else if (elecCaptura == 2) {
+						break;
+					} else {
+						System.out.println("seleccionar una de las opciones");
+					}
+				} catch (Exception e) {
+					System.out.println("Utilizar un número");
+				}
+
+				break;
+			}
 			break;
 		case 3:
-			//PC
+			// PC
 			ArrayList<Pokemon> pokemonsEntrenadorList = jugador.getPokemonAtrapados();
 			Scanner scanPC = new Scanner(System.in);
-			System.out.println("------ Gestion de Equipo y PC ------");
-			
-			for(int i = 0; i<pokemonsEntrenadorList.size(); i++) {
-				//esto de aqui es la etiqueta, es mas que nada para ubicarme rapidamente en que categorizar el size(), osea que pokemons estan en el team o no
+			System.out.println("------ Gestion de Equipo y PC ------\n");
+
+			for (int i = 0; i < pokemonsEntrenadorList.size(); i++) {
+				// esto de aqui es la etiqueta, es mas que nada para ubicarme rapidamente en que
+				// categorizar el size(), osea que pokemons estan en el team o no
 				String etiqueta;
-				if(i<6) {
+				if (i < 6) {
 					etiqueta = "[EQUIPO]";
 				} else {
 					etiqueta = "[PC]";
 				}
-				System.out.println(i+1 + ") " + etiqueta + " - " + pokemonsEntrenadorList.get(i).getNombre());
+				System.out.println(i + 1 + ") " + etiqueta + " - " + pokemonsEntrenadorList.get(i).getNombre());
 			}
-			//Esto de aqui es para SI SOLO SI hay mas de 6 pokemones (TEMPORAL)
-			if(pokemonsEntrenadorList.size() > 6) {
+			// Esto de aqui es para SI SOLO SI hay mas de 6 pokemones (TEMPORAL)
+			if (pokemonsEntrenadorList.size() > 6) {
 				try {
-					System.out.println("Seleccione un Pokemon del [PC] (ID valido desde el 7 o más) que quieras subir: ");
+					System.out
+							.println("Seleccione un Pokemon del [PC] (ID valido desde el 7 o más) que quieras subir: ");
 					int desdeID = Integer.parseInt(scanPC.nextLine()) - 1;
-					
-					System.out.println("Seleccione un Pokemon del [EQUIPO] que sera remplazado (ID valido desde 1 al 6");
+
+					System.out
+							.println("Seleccione un Pokemon del [EQUIPO] que sera remplazado (ID valido desde 1 al 6");
 					int haciaID = Integer.parseInt(scanPC.nextLine()) - 1;
 
-					if(haciaID < 6 && desdeID >= 6 && desdeID < pokemonsEntrenadorList.size()) {
+					if (haciaID < 6 && desdeID >= 6 && desdeID < pokemonsEntrenadorList.size()) {
 						Pokemon temporalPokemon = pokemonsEntrenadorList.get(haciaID);
 						pokemonsEntrenadorList.set(haciaID, pokemonsEntrenadorList.get(desdeID));
-		                pokemonsEntrenadorList.set(desdeID, temporalPokemon);
-		                System.out.println("el cambio se hizo con exito!");
+						pokemonsEntrenadorList.set(desdeID, temporalPokemon);
+						System.out.println("el cambio se hizo con exito!");
 					} else {
 						System.out.println("Movimiento invalido. Pruebe de nuevo.");
 					}
-					
-					
+
 				} catch (NumberFormatException e) {
 					System.out.println(e + " - ERROR: ingrese numeros Validos.");
 				}
 			} else {
-				System.out.println("No tienes pokemons en PC para realizar cambios.");
+				System.out.println("No tienes pokemons en PC para realizar cambios.\n");
 			}
-			
+
 			break;
 		case 4:
+			System.out.println("--- Gimnasios de la Region ---\n");
+			for (int i = 0; i < 8; i++) {
+				System.out.println((i + 1) + ") Líder " + trainers.get(i).getLider());
+			}
+			System.out.println("\n");
+			try {
+				Scanner scannerGym = new Scanner(System.in);
+				System.out.println("\n Selecione el Gimnacion a desafiar: ");
+				int eleccionGym = Integer.parseInt(scannerGym.nextLine()) - 1;
+				if (eleccionGym > 0 && eleccionGym < 8) {
+					Trainer rival = trainers.get(eleccionGym);
+					if (jugador.getMedallasArrayList().contains(rival.getEstado())) {
+						System.out.println("Ya derrotaste a este lider y tienes su medalla.\n");
+						
+					} else if (jugador.getMedallasArrayList().size() >= eleccionGym) {
+						//METODO NUEVO
+					} else {
+						System.out.println("Aun no puedes retar a este líder. Vence al lider anterior primero.\n");
+					}
 
+				} else {
+					System.out.println("Gimnasio inválido.\n");
+				}
+			} catch (NumberFormatException e) {
+				// TODO: handle exception
+				System.out.println("Utilizar un numero.\n");
+			}
 			break;
 		case 5:
 
 			break;
 		case 6:
-			//Curar Pokemons
-			for(Pokemon pokemon : jugador.getPokemonAtrapados()) {
+			// Curar Pokemons
+			for (Pokemon pokemon : jugador.getPokemonAtrapados()) {
 				pokemon.setEstado("Vivo");
 			}
-			System.out.println("todos tus Pokemones han sido curados y listos para la batalla!");
+			System.out.println("todos tus Pokemones han sido curados y listos para la batalla!\n");
 			break;
 		case 7:
 
@@ -288,4 +317,26 @@ public class Sistema {
 			break;
 		}
 	}
+	
+	public void ejecutarBatalla(Trainer rival) {
+		System.out.println("\n--- BATALLA CONTRA LÍDER " + rival.getLider().toUpperCase() + " ---");
+		ArrayList<Pokemon> equipoJugador = new ArrayList<Pokemon>();
+		
+		for (int i = 0; i < jugador.getPokemonAtrapados().size() && i < 6; i++) {
+			if (jugador.getPokemonAtrapados().get(i).getEstado().equalsIgnoreCase("Vivo")) {
+				equipoJugador.add(jugador.getPokemonAtrapados().get(i));
+			}
+		}
+		if(equipoJugador.isEmpty()) {
+			System.out.println("No tienes Pokémon aptos para pelear. Ve a curarlos al PC (Opción 6), o ve a capturar un Pokemon \n");
+			return;
+		}
+		
+		ArrayList<Pokemon> equipoRival = rival.getEquipo();
+		int indexJugar = 0;
+		int indexRival = 0;
+		
+		
+	}
+	
 }

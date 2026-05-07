@@ -37,5 +37,9 @@ public class Player {
 		}
 		return guardarPj;
 	}
+	//para evitar saltarme cosas
+	public ArrayList<String> getMedallasArrayList() {
+		return medallas;
+	}
 
 }

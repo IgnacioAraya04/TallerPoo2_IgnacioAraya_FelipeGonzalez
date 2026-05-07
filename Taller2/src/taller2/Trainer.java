@@ -46,5 +46,9 @@ public class Trainer {
 		}
 
 	}
+	
+	public String getEstado() {
+		return estado;
+	}
 
 }
