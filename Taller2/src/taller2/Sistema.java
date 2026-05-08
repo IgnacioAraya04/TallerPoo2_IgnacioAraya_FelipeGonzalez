@@ -272,6 +272,7 @@ public class Sistema {
 
 			break;
 		case 4:
+			// Retar a un gimnasio.
 			System.out.println("--- Gimnasios de la Region ---\n");
 			for (int i = 0; i < 8; i++) {
 				System.out.println((i + 1) + ") Líder " + trainers.get(i).getLider());
@@ -280,9 +281,9 @@ public class Sistema {
 			try {
 				Scanner scannerGym = new Scanner(System.in);
 				System.out.println("\n Selecione el Gimnasio a desafiar: ");
-				
+
 				int eleccionGym = Integer.parseInt(scannerGym.nextLine()) - 1;
-				
+
 				if (eleccionGym >= 0 && eleccionGym < 8) {
 					Trainer rival = trainers.get(eleccionGym);
 					if (jugador.getMedallasArrayList().contains(rival.getEstado())) {
@@ -304,7 +305,37 @@ public class Sistema {
 			}
 			break;
 		case 5:
+			// 5) Desafio del alto Mando.
 
+			// ESTO ES PARA VALIDAR MEDALLAS
+
+			if (jugador.getMedallasArrayList().size() < 8) {
+				System.out.println("No tienes las 8 medallas necesarias para desafiar al Elite Four \n ");
+				
+			} else {
+				//si cumplio el tema de las medallas - igual revisa esto despues nacho.
+				System.out.println("--- DESAFIO ELITE FOUR ---");
+				for (int i = 0; i < trainers.size(); i++) {
+					System.out.println((i + 1) + ") Miembro: " + trainers.get(i).getLider());
+				}
+				
+				try {
+					Scanner scanEliteFour =new Scanner(System.in);
+					System.out.println("¿A quien deseas desafiar?\n");
+					int optionEliteFour = Integer.parseInt(scanEliteFour.nextLine())-1;
+					
+					if(optionEliteFour >= 8 && optionEliteFour<trainers.size()) {
+						Trainer rival = trainers.get(optionEliteFour);
+						ejecutarBatalla(rival);
+					} else {
+						System.out.println("opcion invalida para Elite Four.\n ");
+					}
+					
+				} catch (NumberFormatException e) {
+					// TODO: handle exception
+					System.out.println("haga el favor de usar NUMEROS (int) \n ");
+				}
+			}
 			break;
 		case 6:
 			// Curar Pokemons
@@ -347,6 +378,7 @@ public class Sistema {
 			System.out.println("\n El líder " + rival.getLider() + " envía a " + pRival.getNombre());
 			System.out.println("¡Adelante " + pJugador.getNombre() + "!");
 			// esta cosa es para la tabla de tipos
+			// odio matrices.....
 			double efectividadJugador = tabla.getEfectividad(pJugador.getNumTipo(), pRival.getNumTipo());
 			double efectividadRival = tabla.getEfectividad(pRival.getNumTipo(), pJugador.getNumTipo());
 
@@ -374,10 +406,22 @@ public class Sistema {
 		}
 		// RESULTADO - con suerte funcionara
 		if (indexRival >= equipoRival.size()) {
-			System.out.println("\n Felicidades has derrotado al lider" + rival.getLider());
+			System.out.println("Felicidades has derrotado al lider" + rival.getLider());
 			System.out.println("Has obtenido la medalla!");
+			
+		    int idRival = trainers.indexOf(rival);
+		    
+		    //esta cosa es temporal, o no, depende de si funciona, basicamente creo medallas para poder identificar a los tipos que sean derrotados
+		    if (idRival >= 0 && idRival < 8) {
+		        String medallaUnica = "MEDALLA-" + (idRival + 1);
+		        
+		        if (!jugador.getMedallasArrayList().contains(medallaUnica)) {
+		            jugador.añadirMedalla(medallaUnica);
+		            System.out.println("Has obtenido la Medalla del Gimnasio " + (idRival + 1));
+		        }
+		    }
 		} else {
-			System.out.println("\n Has perdido el combate. Todos tus Pokémon se debilitaron. Ve a curarlos.\n");
+			System.out.println("Has perdido el combate. Todos tus Pokémon se debilitaron. Ve a curarlos.\n");
 		}
 
 	}
