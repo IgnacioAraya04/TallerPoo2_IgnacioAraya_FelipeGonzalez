@@ -6,6 +6,8 @@ public class Player {
 	private String nombre;
 	private ArrayList<String> medallas;
 	private ArrayList<Pokemon> PokemonAtrapados;
+	private boolean equipoPuedePelear = true;
+	private int combatesEliteFourGanados;
 
 	public Player(String nombre) {
 		super();
@@ -36,6 +38,22 @@ public class Player {
 			guardarPj += medallas.get(i) +";";
 		}
 		return guardarPj;
+	}
+	
+	public boolean isEquipoPuedePelear() {
+		return equipoPuedePelear;
+	}
+
+	public void setEquipoPuedePelear(boolean equipoPuedePelear) {
+		this.equipoPuedePelear = equipoPuedePelear;
+	}
+	
+	public int getCombatesEliteFourGanados() {
+		return combatesEliteFourGanados;
+	}
+
+	public void setCombatesEliteFourGanados(int combatesEliteFourGanados) {
+		this.combatesEliteFourGanados = combatesEliteFourGanados;
 	}
 
 	//para evitar saltarme cosas

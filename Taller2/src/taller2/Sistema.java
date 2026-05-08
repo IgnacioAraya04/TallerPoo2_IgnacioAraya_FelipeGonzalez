@@ -81,7 +81,7 @@ public class Sistema {
 			while (arch.hasNextLine()) {
 				String string = (String) arch.nextLine();
 				String[] partes = string.split(";");
-				tr = new Trainer(Integer.valueOf(partes[0]), partes[1], partes[2], 6);
+				tr = new Trainer(Integer.valueOf(partes[0]), partes[1], "No Derrotado", 6);
 				for (int i = 2; i < tr.getCantidadPoke(); i++) {
 					for (Pokemon pokemon : pokedex) {
 						if (pokemon.getNombre().equalsIgnoreCase(partes[i])) {
@@ -180,7 +180,7 @@ public class Sistema {
 				}
 				System.out.println("\n");
 			} else {
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < 6; i++) {
 					System.out.println((i + 1) + ") " + jugador.getPokemonAtrapados().get(i).getReview());
 				}
 				System.out.println("\n");
@@ -317,30 +317,33 @@ public class Sistema {
 
 			if (jugador.getMedallasArrayList().size() < 8) {
 				System.out.println("No tienes las 8 medallas necesarias para desafiar al Elite Four \n ");
-				
+
 			} else {
-				//si cumplio el tema de las medallas - igual revisa esto despues nacho.
-				System.out.println("--- DESAFIO ELITE FOUR ---");
-				for (int i = 0; i < trainers.size(); i++) {
-					System.out.println((i + 1) + ") Miembro: " + trainers.get(i).getLider());
-				}
-				
-				try {
-					Scanner scanEliteFour =new Scanner(System.in);
-					System.out.println("¿A quien deseas desafiar?\n");
-					int optionEliteFour = Integer.parseInt(scanEliteFour.nextLine())-1;
-					
-					if(optionEliteFour >= 8 && optionEliteFour<trainers.size()) {
-						Trainer rival = trainers.get(optionEliteFour);
-						ejecutarBatalla(rival);
-					} else {
-						System.out.println("opcion invalida para Elite Four.\n ");
+				// si cumplio el tema de las medallas - igual revisa esto despues nacho.
+				do {
+					System.out.println("--- DESAFIO ELITE FOUR ---");
+					for (int i = 9; i < trainers.size(); i++) {
+						System.out.println((i - 8) + ") Miembro: " + trainers.get(i));
+
 					}
-					
-				} catch (NumberFormatException e) {
-					// TODO: handle exception
-					System.out.println("haga el favor de usar NUMEROS (int) \n ");
-				}
+
+					try {
+						Scanner scanEliteFour = new Scanner(System.in);
+						System.out.println("¿A quien deseas desafiar?\n");
+						int optionEliteFour = Integer.parseInt(scanEliteFour.nextLine()) + 8;
+
+						if (optionEliteFour >= 9 && optionEliteFour < trainers.size()) {
+							Trainer rival = trainers.get(optionEliteFour);
+							ejecutarBatalla(rival);
+						} else {
+							System.out.println("opcion invalida para Elite Four.\n ");
+						}
+
+					} catch (NumberFormatException e) {
+						// TODO: handle exception
+						System.out.println("haga el favor de usar NUMEROS (int) \n ");
+					}
+				} while (jugador.isEquipoPuedePelear());
 			}
 			break;
 		case 6:
@@ -348,6 +351,7 @@ public class Sistema {
 			for (Pokemon pokemon : jugador.getPokemonAtrapados()) {
 				pokemon.setEstado("Vivo");
 			}
+			jugador.setEquipoPuedePelear(true);
 			System.out.println("todos tus Pokemones han sido curados y listos para la batalla!\n");
 			break;
 		case 7:
@@ -360,6 +364,7 @@ public class Sistema {
 	}
 
 	public void ejecutarBatalla(Trainer rival) {
+		Scanner scan = new Scanner(System.in);
 		System.out.println("\n--- BATALLA CONTRA LÍDER " + rival.getLider().toUpperCase() + " ---");
 		ArrayList<Pokemon> equipoJugador = new ArrayList<Pokemon>();
 
@@ -375,15 +380,19 @@ public class Sistema {
 		}
 
 		ArrayList<Pokemon> equipoRival = rival.getEquipo();
-		int indexJugador = 0;
+		Pokemon pJugador = equipoJugador.get(0);
 		int indexRival = 0;
 
-		while (indexJugador < equipoJugador.size() && indexRival < equipoRival.size()) {
-			Pokemon pJugador = equipoJugador.get(indexJugador);
+		while (jugador.isEquipoPuedePelear() && indexRival < equipoRival.size()) {
+			if (jugador.getCombatesEliteFourGanados() == 6) {
+				System.out.println("Felicidades, has derrotado al Alto Mando :D !!");
+				break;
+			}
 			Pokemon pRival = equipoRival.get(indexRival);
 
 			System.out.println("\n El líder " + rival.getLider() + " envía a " + pRival.getNombre());
 			System.out.println("¡Adelante " + pJugador.getNombre() + "!");
+			pJugador = menuBatalla(pJugador);
 			// esta cosa es para la tabla de tipos
 			// odio matrices.....
 			double efectividadJugador = tabla.getEfectividad(pJugador.getNumTipo(), pRival.getNumTipo());
@@ -402,25 +411,84 @@ public class Sistema {
 				indexRival++;
 			} else if (poderDeRival > poderDeJugador) {
 				System.out.println(pJugador.getNombre() + " se ha debilitado!");
-				pJugador.setEstado("Debilitado");
-				indexJugador++;
+				pJugador.setEstado("Debilitado");do {
+					System.out.println("Que Pokemon saldra a combatir?");
+					for (int i = 0; i < 6; i++) {
+						System.out.println((i + 1) + ") " + jugador.getPokemonAtrapados().get(i));
+					}
+					Integer newPoke = Integer.valueOf(scan.nextLine());
+					if (jugador.getPokemonAtrapados().get(newPoke-1).getEstado().equalsIgnoreCase("Debilitado")) {
+						System.out.println("Este Pokemon está debilitado!!");
+					} else {
+						pJugador = jugador.getPokemonAtrapados().get(newPoke - 1);
+						break;
+					}
+				} while (true);
 			} else {
 				System.out.println("¡Ambos Pokémon cayeron en un empate de poder!");
 				pJugador.setEstado("Debilitado");
-				indexJugador++;
 				indexRival++;
 			}
 		}
 		// RESULTADO - con suerte funcionara
 		if (indexRival >= equipoRival.size()) {
-			System.out.println("Felicidades has derrotado al lider" + rival.getLider());
-			System.out.println("Has obtenido la medalla!");
-			 jugador.añadirMedalla(rival.getLider());
-	         rival.setEstado("Derrotado");
+			if (jugador.getMedallasArrayList().size() > 8) {
+				System.out.println("Felicidades has derrotado al Alto Mando " + rival.getLider());
+				rival.setEstado("Derrotado");
+				jugador.setCombatesEliteFourGanados(jugador.getCombatesEliteFourGanados()+1);
+			} else {
+				System.out.println("Felicidades has derrotado al lider" + rival.getLider());
+				System.out.println("Has obtenido la medalla!");
+				jugador.añadirMedalla(rival.getLider());
+				rival.setEstado("Derrotado");
+			}
 		} else {
 			System.out.println("Has perdido el combate. Todos tus Pokémon se debilitaron. Ve a curarlos.\n");
+			if (jugador.getMedallasArrayList().size() > 8) {
+				for (int i = 9; i < trainers.size(); i++) {
+					trainers.get(i).setEstado("No Derrotado");
+				}
+			}
+			jugador.setEquipoPuedePelear(false);
+			jugador.setCombatesEliteFourGanados(0);
 		}
 
 	}
 
+	public Pokemon menuBatalla(Pokemon poke) {
+		Scanner scan = new Scanner(System.in);
+		do {
+		System.out.println("Que deseas hacer\n" + "1) Combatir\n" + "2) Cambiar Pokemon");
+			try {
+				Integer elec = Integer.valueOf(scan.nextLine());
+				switch (elec) {
+				case 1:
+					return poke;
+
+				case 2:
+					do {
+						System.out.println("Cual pokemon deseas elegir?");
+						for (int i = 0; i < 6; i++) {
+							System.out.println((i + 1) + ") " + jugador.getPokemonAtrapados().get(i));
+						}
+						Integer newPoke = Integer.valueOf(scan.nextLine());
+						if (jugador.getPokemonAtrapados().get(newPoke - 1).equals(poke)) {
+							System.out.println("Ese Pokemon ya esta en combate!!!");
+						} else if (jugador.getPokemonAtrapados().get(newPoke-1).getEstado().equalsIgnoreCase("Debilitado")) {
+							System.out.println("Este Pokemon está debilitado!!");
+						} else {
+							return jugador.getPokemonAtrapados().get(newPoke - 1);
+						}
+					} while (true);
+
+				default:
+					System.out.println("Seleccione uno de los Pokemon");
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("Valor ingresado no es válido");
+			}	
+		} while (true);
+		
+	}
 }

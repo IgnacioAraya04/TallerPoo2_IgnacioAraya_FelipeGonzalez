@@ -86,5 +86,11 @@ public class Pokemon {
 			}
 		}
 	}
+
+	@Override
+	public String toString() {
+		return nombre + " | Tipo: " + tipo + " | " + estado ;
+	}
+	
 	
 }

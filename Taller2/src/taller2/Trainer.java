@@ -55,4 +55,10 @@ public class Trainer {
 		this.estado = estado;
 	}
 
+	@Override
+	public String toString() {
+		return  lider + "| " + estado ;
+	}
+
+	
 }
