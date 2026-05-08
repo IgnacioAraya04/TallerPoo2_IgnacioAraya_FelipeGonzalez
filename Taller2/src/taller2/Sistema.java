@@ -119,9 +119,14 @@ public class Sistema {
 			String usuario = registros.nextLine();
 			String[] partesUsuario = usuario.split(";");
 			jugador = new Player(partesUsuario[0]);
-			if (partesUsuario[1] == "") {
+			if (partesUsuario[1].isEmpty()) {
 			} else {
-				jugador.añadirMedalla(partesUsuario[1]);
+				for (int i = 1; i < partesUsuario.length; i++) {
+					jugador.añadirMedalla(partesUsuario[i]);
+					if (trainers.get(i).getLider().equalsIgnoreCase(partesUsuario[i])) {
+						trainers.get(i).setEstado("Derrotado");
+					}
+				}
 			}
 			registros.nextLine();
 			while (registros.hasNextLine()) {
@@ -156,6 +161,7 @@ public class Sistema {
 		escritor = new BufferedWriter(new FileWriter("Registros.txt"));
 		escritor.write(jugador.guardar());
 		escritor.newLine();
+		escritor.newLine();
 		for (Pokemon pokemon : jugador.getPokemonAtrapados()) {
 			escritor.write(pokemon.guardar());
 			escritor.newLine();
@@ -164,7 +170,7 @@ public class Sistema {
 		escritor.close();
 	}
 
-	public void menu(Integer elec) {
+	public void menu(Integer elec) throws IOException {
 		switch (elec) {
 		case 1:
 			System.out.println("Equipo: ");
@@ -345,9 +351,10 @@ public class Sistema {
 			System.out.println("todos tus Pokemones han sido curados y listos para la batalla!\n");
 			break;
 		case 7:
-
+			guardarPartida();
 			break;
 		default:
+			guardarPartida();
 			break;
 		}
 	}
@@ -408,18 +415,8 @@ public class Sistema {
 		if (indexRival >= equipoRival.size()) {
 			System.out.println("Felicidades has derrotado al lider" + rival.getLider());
 			System.out.println("Has obtenido la medalla!");
-			
-		    int idRival = trainers.indexOf(rival);
-		    
-		    //esta cosa es temporal, o no, depende de si funciona, basicamente creo medallas para poder identificar a los tipos que sean derrotados
-		    if (idRival >= 0 && idRival < 8) {
-		        String medallaUnica = "MEDALLA-" + (idRival + 1);
-		        
-		        if (!jugador.getMedallasArrayList().contains(medallaUnica)) {
-		            jugador.añadirMedalla(medallaUnica);
-		            System.out.println("Has obtenido la Medalla del Gimnasio " + (idRival + 1));
-		        }
-		    }
+			 jugador.añadirMedalla(rival.getLider());
+	         rival.setEstado("Derrotado");
 		} else {
 			System.out.println("Has perdido el combate. Todos tus Pokémon se debilitaron. Ve a curarlos.\n");
 		}

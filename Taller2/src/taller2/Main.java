@@ -55,13 +55,14 @@ public class Main {
 				if (eleccion >= 1 && eleccion <= 8) {
 					sistem.menu(eleccion);
 				}
-				
+				if (eleccion ==8) {
+					break;
+				}
 			} catch (Exception e) {
 				
 			}
 
 		}
-		scan.close();
 
 	}
 }

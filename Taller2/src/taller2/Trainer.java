@@ -51,4 +51,8 @@ public class Trainer {
 		return estado;
 	}
 
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
 }

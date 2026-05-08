@@ -31,12 +31,13 @@ public class Player {
 	}
 
 	public String guardar() {
-		String guardarPj = nombre;
+		String guardarPj = nombre +";";
 		for (int i = 0; i < medallas.size(); i++) {
-			guardarPj += ";" + medallas.get(i);
+			guardarPj += medallas.get(i) +";";
 		}
 		return guardarPj;
 	}
+
 	//para evitar saltarme cosas
 	public ArrayList<String> getMedallasArrayList() {
 		return medallas;
