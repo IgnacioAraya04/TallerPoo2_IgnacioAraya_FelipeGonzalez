@@ -1,5 +1,6 @@
 package taller2;
-
+//Integrante 1: Ignacio Araya Munizaga - 21.824.045-3 - ITI
+//Integrante 2: Felipe Gonzáles Zuleta - 21.776.516-1 - ITI
 import java.io.IOException;
 import java.util.Scanner;
 
