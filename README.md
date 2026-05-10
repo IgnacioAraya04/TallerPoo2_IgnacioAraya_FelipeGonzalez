@@ -61,9 +61,11 @@ correspondiente de cada uno.
 Instrucciones de ejecucion:
 Al ejecutar el programa, se ejecutara un menu para cargar o inciar una partida nueva que tendra
 las siguientes opciones:
+
 1) Continuar partida guardada
 2) Nueva partida (solicita nombre)
 3) Salir
+   
 Se debera ingresar un valor entero (1-3) para seleccionar alguna de las opciones, en caso de 
 no haber una partida guardada se le notificara de ello.
 Luego de continuar/inicaiar nueva partida, se le dirigira a un menu que contiene el resto de
@@ -77,6 +79,7 @@ acciones que el usuario podra realizar, estas siendo:
 6)Curar Pokémon
 7)Guardar partida
 8)Guardar y salir
+
 Se debera ingresar un valor entero (1-8) para seleccionar alguna de las opciones.
 Al revisar equipo se le mostrara los 6 pokemon que utilizara para combatir.
 Al capturar pokemon, se le preguntara que habitat desea ir y se le proporcionara un pokemon
